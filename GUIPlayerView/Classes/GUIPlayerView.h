@@ -29,6 +29,7 @@
 @interface GUIPlayerView : UIView
 
 @property (strong, nonatomic) NSURL *videoURL;
+@property (assign, nonatomic) BOOL portraitFullScreen;
 @property (assign, nonatomic) NSInteger controllersTimeoutPeriod;
 @property (weak, nonatomic) id<GUIPlayerViewDelegate> delegate;
 
