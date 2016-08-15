@@ -49,7 +49,7 @@
 @synthesize playButton, fullscreenButton, volumeView, progressIndicator, currentTimeLabel, remainingTimeLabel, liveLabel, spacerView;
 @synthesize activityIndicator, progressTimer, controllersTimer, seeking, fullscreen, defaultFrame;
 
-@synthesize videoURL, controllersTimeoutPeriod, delegate;
+@synthesize videoURL, portraitFullScreen, controllersTimeoutPeriod, delegate;
 
 #pragma mark - View Life Cycle
 
@@ -321,13 +321,13 @@
     CGFloat height = [[UIScreen mainScreen] bounds].size.height;
     CGRect frame;
     
-    if (UIInterfaceOrientationIsPortrait(orientation)) {
+    if (self.portraitFullScreen || !UIInterfaceOrientationIsPortrait(orientation)) {
+      frame = CGRectMake(0, 0, width, height);
+    } else {
       CGFloat aux = width;
       width = height;
       height = aux;
       frame = CGRectMake((height - width) / 2, (width - height) / 2, width, height);
-    } else {
-      frame = CGRectMake(0, 0, width, height);
     }
     
     if ([delegate respondsToSelector:@selector(playerWillEnterFullscreen)]) {
@@ -339,7 +339,7 @@
       [playerLayer setFrame:CGRectMake(0, 0, width, height)];
       
       [activityIndicator setFrame:CGRectMake(0, 0, width, height)];
-      if (UIInterfaceOrientationIsPortrait(orientation)) {
+      if (!self.portraitFullScreen && UIInterfaceOrientationIsPortrait(orientation)) {
         [self setTransform:CGAffineTransformMakeRotation(M_PI_2)];
         [activityIndicator setTransform:CGAffineTransformMakeRotation(M_PI_2)];
       }
